@@ -1,0 +1,67 @@
+#container{float:left; width:100%;}
+#weather-ico{float:left;width:50%;}
+#icon-svg{padding-right:40px;}
+#thermometerIco{float:left;margin-right:0px;}
+#weather{float:right;width:50%;}
+#comics{float:left;width:100%;}
+#forecasts{float:left;width:50%;margin-left:25%;margin-right:25%;}
+#forecast1{float:left;width:25%;}
+#forecast2{float:left;display: inline;width:25%;}
+#forecast3{float:left;display: inline;width:25%;}
+#forecast4{float:right;width:25%;}
+#humidity{margin-left:20px;}
+#btnMyLocation{ 
+	float:left;	
+    width:17%;
+    height:30px;    
+    border: 1px solid;
+    border-radius: 10px;
+    background: transparent;
+    font-size:20px;
+	margin-left: 5%;
+}
+#searchIco{}
+#TextBoxSearch{
+	float:right; 
+	width: 74%; 
+	background: transparent; 
+	border: 1px solid;
+	margin-top: 5px;
+	padding-left: 2%;
+	margin-left : 1%;
+}
+#recent{float:left;width:50%;margin-left:25%;margin-right:25%;
+	
+	border-radius: 25px;
+    border: 2px solid ;
+    padding-top: 15px; 
+	padding-bottom: 15px;
+}
+#recent1{float:left;width:25%;}
+#recent2{float:left;display: inline;width:25%;}
+#recent3{float:left;display: inline;width:25%;}
+#recent4{float:right;width:25%;}
+.btnsRecent
+{	
+    width:90%;
+    height:30px;    
+    border: 1px solid;
+    border-radius: 10px;
+    background: transparent;
+    font-weight: bold;
+}
+
+#graph{float:left;width:50%;margin-left:25%;margin-right:25%; margin-top:10px;
+	
+	border-radius: 25px;
+    border: 2px solid ;
+    padding-top: 15px; 
+	padding-bottom: 15px;
+	
+}
+#chartTemperature{float:left;width:30%;margin-left:10px;}
+#chartHumidity{float:left;width:30%;padding-left:10px;margin-left:10px;}
+#chartPressure{float:right;width:33%;margin-right:10px;}
+#tempTitle{text-align:center;}
+#humTitle{text-align:center;}
+#presTitle{text-align:center;}

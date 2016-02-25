@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Meteo of The Day</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
+    <script src="cookies/lib/jaaulde-cookies.js"></script>
+	<script src="charts/Chart.js"></script>
+    <link rel="icon" type="image/png" href="favicon.png" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body id="body" >
+
+    <form id="form1">
+
+<div id="container">
+    <div id="weather-title" align="center"></div>
+    <div id="weather-ico" align="right"></div>
+    <div id="weather" align="left"></div>
+</div>   
+<br />
+<div id="forecasts">
+    <div id="forecast1" align="center"></div>
+    <div id="forecast2" align="center"></div>
+    <div id="forecast3" align="center"></div>
+    <div id="forecast4" align="center"></div>
+</div>
+<br />
+<div id="recent">   
+    <div id="recent1" align="center"> 
+       
+        <button id="btnMyLocation" type="button" onclick="getWeatherByLocale();"><i id="searchIco" class="fa fa-map-marker"></i></button> 
+        <input id="TextBoxSearch" value="Desired location here" onfocus="clearLocalTextBox(this);"  type="text"></input>
+       
+    </div>
+    <div id="recent2" align="center"><button  type="button" class="btnsRecent" id="btnRecent1" onclick="recentClicked(this)"></button></div>
+    <div id="recent3" align="center"><button  type="button" class="btnsRecent" id="btnRecent2" onclick="recentClicked(this)"></button></div>
+    <div id="recent4" align="center"><button  type="button" class="btnsRecent" id="btnRecent3" onclick="recentClicked(this)"></button></div>  
+   
+</div>
+<div id="graph">
+	<div id="chartTemperature">
+		<div id="tempTitle">Temperature (°C)</div>
+		<canvas id="myChartTemp"  height="200"></canvas>
+	</div> 
+	<div id="chartHumidity">
+		<div id="humTitle">Humidity (%)</div>
+		<canvas id="myChartHum" height="200"></canvas>
+	</div> 
+	<div id="chartPressure">
+		<div id="presTitle">Pressure (mbar)</div>
+		<canvas id="myChartPres" height="200"></canvas>
+	</div> 
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
+<script>
+//localizzazione di default a Genova :P
+var defaultLocal = 'genoa';
+
+var locationArray = ['a','b','c'];
+
+    //////////////////////////////////
+    /* Funzioni per gestire bottoni e textbox */
+
+
+
+function clearLocalTextBox(obj) {
+    obj.value = "";
+}
+
+
+$('#TextBoxSearch').keypress(function (event) {
+
+    if (event.keyCode == 10 || event.keyCode == 13)
+    {
+        event.preventDefault();
+        var search = document.getElementById('TextBoxSearch').value;
+
+
+        //salva risultati ricerca
+        saveLatestSearch(search);
+
+        //aggiorna meteo
+        getWeather(search);
+
+        //carica risultati - aggiorna
+        loadLatestSearch();
+    }
+      
+});
+
+function saveLatestSearch(currentLocation)
+{
+    //salva le ultiume tre località cercate e le mostra in ordine
+    locationArray[2] = locationArray[1];
+    locationArray[1] = locationArray[0];
+    locationArray[0] = currentLocation;
+    
+    //cookies.set('test', currentLocation);
+    var expireDate = new Date();
+    //alert("expire before:" + expireDate.getTime());
+    expireDate.setTime(expireDate.getTime() + 31536000000); //1 year cookies expire
+    //alert("expire after:" + expireDate.getTime());
+
+    cookies.set('lastLocations1', locationArray[0], { expires: expireDate });
+    cookies.set('lastLocations2', locationArray[1], { expires: expireDate });
+    cookies.set('lastLocations3', locationArray[2], { expires: expireDate });
+}
+
+function loadLatestSearch()
+{
+    //lettura da cookie
+
+    //locationArray[0] = cookies.get('test');
+    //if(locationArray[0]== null)
+    //{
+    //    cookies.set('test', 'valoreprova');
+    //}
+
+    locationArray[0] = cookies.get('lastLocations1');
+    locationArray[1] = cookies.get('lastLocations2');
+    locationArray[2] = cookies.get('lastLocations3');
+
+    if(locationArray[0] == null)
+    {
+        locationArray[0] = ' ';
+        cookies.set('lastLocations1', '');
+    }
+    if(locationArray[1] == null)
+    {
+        locationArray[1] = ' ';
+        cookies.set('lastLocations2', '');
+    }
+    if (locationArray[2] == null) {
+        locationArray[2] = ' ';
+        cookies.set('lastLocations3', '');
+    }
+
+    //aggiorna le scritte
+    $('#btnRecent1').html(locationArray[0]);
+    $("#btnRecent1").prop('value', locationArray[0]);
+
+    $('#btnRecent2').html(locationArray[1]);
+    $("#btnRecent2").prop('value', locationArray[1]);
+
+    $('#btnRecent3').html(locationArray[2]);
+    $("#btnRecent3").prop('value', locationArray[2]);
+}
+
+function recentClicked(obj)
+{
+    //alert(obj.value);
+    //aggiorna meteo
+    getWeather(obj.value);
+}
+
+    //////////////////////////////////
+    /*Funzioni per meteo */
+
+
+
+    $(document).ready(function () {
+        loadLatestSearch(); //load last search
+
+        getWeatherByLocale(); //Get the initial weather.
+        setInterval(getWeatherByLocale, 3600000); //Update the weather every 60 minutes.
+
+        /*
+        getWeather(); //Get the initial weather.
+        setInterval(getWeather, 3600000); //Update the weather every 60 minutes.
+        */
+    });
+
+function getReadableDate()
+{
+    var today = new Date();
+    var day = today.getDay();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var readableDay = dayNames[day];
+    var readableMonth = monthNames[mm - 1];
+
+    return today = readableDay + ' ' + dd + ' ' + readableMonth + ' ' + yyyy;
+}
+
+  
+//geolocalizzazione
+function getWeatherByLocale() {
+
+    //alert("getWeather localizzata");
+        //se la geolocalizzazione è disponibile nel browser, chiedi.
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(successCurrentPos, errorCurrentPos);
+        }
+        else {
+            getWeather(defaultLocal);
+        }
+}
+
+successCurrentPos = function (position) { getWeather(position.coords.latitude + ',' + position.coords.longitude); }
+errorCurrentPos = function (error) { getWeather(defaultLocal); }
+
+
+function getWeather(myposition) {
+
+    var pressureText = ["steady", "rising", "falling"];
+    var pressureIcons = ["<i class=\"fa fa-minus\"></i> ", "<i class=\"fa fa-arrow-up\"></i> ", "<i class=\"fa fa-arrow-down\"></i> "];
+
+
+    $.simpleWeather({
+        location: myposition,
+        woeid: '',
+        unit: 'c',
+        success: function (weather) {
+            html = '<p><div id="thermometerIco"><img src="meteoconsSVG/Image-43.png" width="16px"/></div>' + weather.temp + '&deg;' + weather.units.temp + '<i id="humidity" class="fa fa-tint"></i> ' +
+                 weather.humidity + '% </p><p>' + pressureIcons[weather.rising] +
+                 weather.pressure + ' ' + weather.units.pressure + ' ' + pressureText[weather.rising] + '</p><p><i class="fa fa-bars"></i> ' +
+                 weather.wind.speed + weather.units.speed + ' from ' + weather.wind.direction + '</p><p><i class="fa fa-adjust"></i> ' +
+                'Sun from ' + weather.sunrise + ' to ' + weather.sunset + '</p>';
+            html_title = '<h4>' + weather.title + ' on ' + getReadableDate() + ': ' + weather.currently + '.</h4>' ;
+            
+            $('#weather').html(html);
+            $('#weather-title').html(html_title);
+            var yahooCodesPositionMeteoconsValues = [45,45,45,26,15,24,24,24,22,22,21,17,18,23,21,21,19,45,45,45,13,10,12,45,6,7,25,34,14,41,8,28,2,28,2,24,2,15,15,15,18,23,23,23,8,16,23,16,45];
+            var iconName;
+            if (weather.code != 3200)
+            {
+               iconName = 'Image-' + yahooCodesPositionMeteoconsValues[weather.code] + '.png';
+            }
+            else
+            {
+                iconName = 'Image-45.png';
+            }
+                        
+            icon = '<img id="icon-svg" src="meteoconsSVG/' + iconName + '" width="150px"/>';
+            $('#weather-ico').html(icon);
+
+            //forecast
+            var htmlForecastX = [];
+            for(var i=0;i<4;i++)
+            {
+                var icon;               
+
+                if (weather.code != 3200) {
+                    icon = 'Image-' + yahooCodesPositionMeteoconsValues[weather.forecast[i + 1].code] + '.png';
+                }
+                else {
+                    icon = 'Image-45.png';
+                }
+
+                icon = '<img src="meteoconsSVG/' + icon + '" width="70px">';
+
+                htmlForecastX[i] = '<p><b>' + weather.forecast[i + 1].day + ' ' + weather.forecast[i + 1].date + '</b></p><p>' + icon + '</p><p>' + weather.forecast[i + 1].text + '</p>';
+            }
+            $('#forecast1').html(htmlForecastX[0]);
+            $('#forecast2').html(htmlForecastX[1]);
+            $('#forecast3').html(htmlForecastX[2]);
+            $('#forecast4').html(htmlForecastX[3]);
+        },
+        error: function (error) {
+            $('#weather').html('<p>' + error + '</p>');
+        }
+    });
+
+};
+
+//grafici
+var dataTemp = {
+    labels: ["12:00", "13:00", "14:00"],
+    datasets: [
+        {
+            label: "Temperature",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 70, 56]
+        }
+    ]
+};
+
+var dataHum = {
+    labels: ["12:00", "13:00", "14:00"],
+    datasets: [
+        {
+            label: "Humidity",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [30, 21, 75]
+        }
+    ]
+};
+
+var dataPres = {
+    labels: ["12:00", "13:00", "14:00"],
+    datasets: [
+        {
+            label: "Pressure",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [1010, 1015.92, 987.3]
+        }
+    ]
+};
+
+
+// Get context with jQuery - using jQuery's .get() method.
+var ctxTemp = $("#myChartTemp").get(0).getContext("2d");
+// This will get the first returned node in the jQuery collection.
+var myLineChartTemp = new Chart(ctxTemp).Line(dataTemp, {});
+
+myLineChartTemp.addData([60], "18:00");
+
+var ctxHum = $("#myChartHum").get(0).getContext("2d");
+var myLineChartHum = new Chart(ctxHum).Line(dataHum, {});
+
+var ctxPres = $("#myChartPres").get(0).getContext("2d");
+var myLineChartPres = new Chart(ctxPres).Line(dataPres, {});
+
+</script>
+
+    </form>
+
+</body>
+</html>
