@@ -1,0 +1,2 @@
+# MeteoOfTheDay
+My simpleWeather implementation.
