@@ -54,7 +54,8 @@
 	</div> 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
 <script>
 //localizzazione di default a Genova :P
 var defaultLocal = 'genoa';
@@ -163,6 +164,8 @@ function recentClicked(obj)
 
     $(document).ready(function () {
         loadLatestSearch(); //load last search
+		
+		$('#weather').html("test"); //test
 
         getWeatherByLocale(); //Get the initial weather.
         setInterval(getWeatherByLocale, 3600000); //Update the weather every 60 minutes.
@@ -213,7 +216,8 @@ function getWeather(myposition) {
     var pressureText = ["steady", "rising", "falling"];
     var pressureIcons = ["<i class=\"fa fa-minus\"></i> ", "<i class=\"fa fa-arrow-up\"></i> ", "<i class=\"fa fa-arrow-down\"></i> "];
 
-
+	$('#weather').html("getWeather"); //test
+	
     $.simpleWeather({
         location: myposition,
         woeid: '',
