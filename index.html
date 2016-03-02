@@ -39,6 +39,8 @@
     <div id="recent4" align="center"><button  type="button" class="btnsRecent" id="btnRecent3" onclick="recentClicked(this)"></button></div>  
    
 </div>
+
+<!--
 <div id="graph">
 	<div id="chartTemperature">
 		<div id="tempTitle">Temperature (°C)</div>
@@ -53,6 +55,7 @@
 		<canvas id="myChartPres" height="200"></canvas>
 	</div> 
 </div>
+-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
@@ -275,6 +278,7 @@ function getWeather(myposition) {
 
 };
 
+
 //grafici
 var dataTemp = {
     labels: ["12:00", "13:00", "14:00"],
@@ -287,7 +291,7 @@ var dataTemp = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 70, 56]
+            data: [20, 19]
         }
     ]
 };
@@ -328,15 +332,16 @@ var dataPres = {
 // Get context with jQuery - using jQuery's .get() method.
 var ctxTemp = $("#myChartTemp").get(0).getContext("2d");
 // This will get the first returned node in the jQuery collection.
-var myLineChartTemp = new Chart(ctxTemp).Line(dataTemp, {});
+var myLineChartTemp = new Chart(ctxTemp).Line(dataTemp, {scaleOverride: true, scaleStartValue: -10, scaleStepWidth: 5, scaleSteps: 8});
 
-myLineChartTemp.addData([60], "18:00");
+myLineChartTemp.addData([20], "18:00");
 
 var ctxHum = $("#myChartHum").get(0).getContext("2d");
 var myLineChartHum = new Chart(ctxHum).Line(dataHum, {});
 
 var ctxPres = $("#myChartPres").get(0).getContext("2d");
 var myLineChartPres = new Chart(ctxPres).Line(dataPres, {});
+
 
 </script>
 
