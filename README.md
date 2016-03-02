@@ -1,5 +1,6 @@
 # MeteoOfTheDay
 My simpleWeather implementation.
+See it in action <a href="http://104.153.209.223/meteo/index.html">here!</a>
 
 # Credits
 Icons: <a href="https://github.com/FortAwesome/Font-Awesome">Font Awesome</a><br/>
