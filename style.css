@@ -23,7 +23,7 @@
 #searchIco{}
 #TextBoxSearch{
 	float:right; 
-	width: 74%; 
+	width: 73%; 
 	background: transparent; 
 	border: 1px solid;
 	margin-top: 5px;
@@ -50,18 +50,3 @@
     background: transparent;
     font-weight: bold;
 }
-
-#graph{float:left;width:50%;margin-left:25%;margin-right:25%; margin-top:10px;
-	
-	border-radius: 25px;
-    border: 2px solid ;
-    padding-top: 15px; 
-	padding-bottom: 15px;
-	
-}
-#chartTemperature{float:left;width:30%;margin-left:10px;}
-#chartHumidity{float:left;width:30%;padding-left:10px;margin-left:10px;}
-#chartPressure{float:right;width:33%;margin-right:10px;}
-#tempTitle{text-align:center;}
-#humTitle{text-align:center;}
-#presTitle{text-align:center;}
