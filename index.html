@@ -168,7 +168,7 @@ function recentClicked(obj)
     $(document).ready(function () {
         loadLatestSearch(); //load last search
 		
-		$('#weather').html("test"); //test
+		//$('#weather').html("test"); //test
 
         getWeatherByLocale(); //Get the initial weather.
         setInterval(getWeatherByLocale, 3600000); //Update the weather every 60 minutes.
@@ -219,7 +219,7 @@ function getWeather(myposition) {
     var pressureText = ["steady", "rising", "falling"];
     var pressureIcons = ["<i class=\"fa fa-minus\"></i> ", "<i class=\"fa fa-arrow-up\"></i> ", "<i class=\"fa fa-arrow-down\"></i> "];
 
-	$('#weather').html("getWeather"); //test
+	//$('#weather').html("getWeather"); //test
 	
     $.simpleWeather({
         location: myposition,
