@@ -203,10 +203,7 @@ function getWeatherByLocale() {
     //alert("getWeather localizzata");
         //se la geolocalizzazione è disponibile nel browser, chiedi.
         if ("geolocation" in navigator) {
-            //navigator.geolocation.getCurrentPosition(successCurrentPos, errorCurrentPos);
-			navigator.geolocation.getCurrentPosition(function(position) {
-					getWeather(position.coords.latitude + ',' + position.coords.longitude);
-				});
+            navigator.geolocation.getCurrentPosition(successCurrentPos, errorCurrentPos);
         }
         else {
             getWeather(defaultLocal);
