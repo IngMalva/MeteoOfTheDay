@@ -203,12 +203,16 @@ function getWeatherByLocale() {
     //alert("getWeather localizzata");
         //se la geolocalizzazione è disponibile nel browser, chiedi.
         if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(successCurrentPos, errorCurrentPos);
+            //navigator.geolocation.getCurrentPosition(successCurrentPos, errorCurrentPos);
+			navigator.geolocation.getCurrentPosition(function(position) {
+					getWeather(position.coords.latitude + ',' + position.coords.longitude);
+				});
         }
         else {
             getWeather(defaultLocal);
         }
 }
+
 
 successCurrentPos = function (position) { getWeather(position.coords.latitude + ',' + position.coords.longitude); }
 errorCurrentPos = function (error) { getWeather(defaultLocal); }
