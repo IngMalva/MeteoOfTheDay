@@ -58,9 +58,9 @@
 	padding-bottom: 15px;
 	
 }
-#chartTemperature{float:left;width:30%;margin-left:10px;}
-#chartHumidity{float:left;width:30%;padding-left:10px;margin-left:10px;}
-#chartPressure{float:right;width:33%;margin-right:10px;}
+#chartTemperature{float:left;width:33%;}
+#chartHumidity{float:left;display: inline;width:33%;}
+#chartPressure{float:left;width:33%;}
 #tempTitle{text-align:center;}
 #humTitle{text-align:center;}
 #presTitle{text-align:center;}
