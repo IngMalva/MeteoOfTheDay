@@ -229,7 +229,7 @@ function getWeather(myposition) {
         success: function (weather) {
             html = '<p><div id="thermometerIco"><img src="meteoconsSVG/Image-43.png" width="16px"/></div>' + weather.temp + '&deg;' + weather.units.temp + '<i id="humidity" class="fa fa-tint"></i> ' +
                  weather.humidity + '% </p><p>' + pressureIcons[weather.rising] +
-                 weather.pressure + ' ' + weather.units.pressure + ' ' + pressureText[weather.rising] + '</p><p><i class="fa fa-bars"></i> ' +
+                 (weather.pressure * 0.0295301).toFixed(2) + ' ' + weather.units.pressure + ' ' + pressureText[weather.rising] + '</p><p><i class="fa fa-bars"></i> ' +
                  weather.wind.speed + weather.units.speed + ' from ' + weather.wind.direction + '</p><p><i class="fa fa-adjust"></i> ' +
                 'Sun from ' + weather.sunrise + ' to ' + weather.sunset + '</p>';
             html_title = '<h4>' + weather.title + ' on ' + getReadableDate() + ': ' + weather.currently + '.</h4>' ;
